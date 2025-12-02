@@ -1,6 +1,8 @@
 package com.meujogo;
 
 public enum BackGround {
-    DIA,
-    NOITE
+    FOGO,
+    AGUA,
+    FLORESTA,
+    TEMPESTADE
 }
