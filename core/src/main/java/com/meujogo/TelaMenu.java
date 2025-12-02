@@ -20,7 +20,6 @@ public class TelaMenu implements Screen {
         viewport = new FitViewport(1280, 720, camera);
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
-        // Carregue sua imagem de capa aqui
         imagemCapa = new Texture("telaprincipal.png"); // Use uma imagem sua aqui!
     }
 
