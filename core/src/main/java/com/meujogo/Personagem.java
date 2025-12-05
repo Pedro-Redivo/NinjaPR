@@ -14,7 +14,7 @@ public class Personagem implements Disposable {
         this.textura = new Texture(caminhoImagem);
         this.x = inicioX;
         this.y = inicioY;
-        this.velocidade = 200; // Velocidade padrão
+        this.velocidade = 200;
     }
 
     public void render(SpriteBatch batch) {

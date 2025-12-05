@@ -4,15 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Heroi extends Personagem {
     
-    // Variáveis de Física
     private Texture imgParado;
     private Texture imgCorrendo;
     private Texture imgPulando;
     private Texture imgAgachado;
     private EstadoHeroi estadoAtual;
+    public Rectangle hitbox;
     private boolean olhandoDireita = true;
     
     private float velocidadeY = 0; 
@@ -25,14 +26,14 @@ public class Heroi extends Personagem {
         imgCorrendo = new Texture("ninjaRun1.png");
         imgPulando = new Texture("ninjaPulando1.png");
         imgAgachado = new Texture("ninjaAgachado1.png");
+        hitbox = new Rectangle(x, y, 20, textura.getHeight());
         this.velocidade = 300;
         this.estadoAtual = EstadoHeroi.PARADO;
     }
 
-    public void atualizar(float delta) {
+    public void atualizar(float delta, Array<Rectangle> plataformas) {
         estadoAtual = EstadoHeroi.PARADO;
 
-        // --- 1. Movimento Horizontal ---
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             x += velocidade * delta;
             estadoAtual = EstadoHeroi.CORRENDO;
@@ -43,14 +44,18 @@ public class Heroi extends Personagem {
             estadoAtual = EstadoHeroi.CORRENDO;
             olhandoDireita = false;
         }
+        else{ 
+
+            if(estaNoChao) estadoAtual = EstadoHeroi.PARADO;
+        }
+        
         if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
             estadoAtual = EstadoHeroi.AGACHADO;
         }
 
         // --- 2. PULO ---
-        // Se apertar ESPAÇO e estiver no chão -> PULA
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && estaNoChao) {
-            velocidadeY = 500; // Força do pulo
+            velocidadeY = 500;
             estaNoChao = false;
         }
 
@@ -59,8 +64,10 @@ public class Heroi extends Personagem {
         }
 
         // --- 3. GRAVIDADE ---
-        velocidadeY += gravidade * delta; // A gravidade puxa a velocidade para baixo
-        y += velocidadeY * delta;         // A velocidade move o personagem
+        velocidadeY += gravidade * delta; 
+        y += velocidadeY * delta;  
+
+        hitbox.setPosition(x + 10, y);
 
         // --- 4. COLISÃO COM O CHÃO ---
         if (y < 179) {
