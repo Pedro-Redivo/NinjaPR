@@ -3,6 +3,8 @@ package com.meujogo;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -13,6 +15,7 @@ public class TelaJogo implements Screen {
     private FitViewport viewport;
     private Heroi player;
     private Texture imgFundo;
+    private Array<Rectangle> chaoSolido;
 
     public TelaJogo(final Main game) {
         this.game = game;
@@ -25,6 +28,11 @@ public class TelaJogo implements Screen {
         // 2. Carrega os assets
         imgFundo = new Texture("BackGroundTest.jpg");
         player = new Heroi(100, 0);
+
+        chaoSolido = new Array<>();
+        chaoSolido.add(new Rectangle(0, 0, 1280, 100));
+        chaoSolido.add(new Rectangle(500, 200, 200, 40));
+
     }
 
     @Override
@@ -34,7 +42,7 @@ public class TelaJogo implements Screen {
     @Override
     public void render(float delta) {
         // --- Lógica ---
-        player.atualizar(delta);
+        player.atualizar(delta, chaoSolido);
         camera.update();
 
         // --- Desenho ---

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 
 public class Heroi extends Personagem {
     
@@ -53,7 +54,6 @@ public class Heroi extends Personagem {
             estadoAtual = EstadoHeroi.AGACHADO;
         }
 
-        // --- 2. PULO ---
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && estaNoChao) {
             velocidadeY = 500;
             estaNoChao = false;
@@ -63,27 +63,23 @@ public class Heroi extends Personagem {
             estadoAtual = EstadoHeroi.PULANDO;
         }
 
-        // --- 3. GRAVIDADE ---
         velocidadeY += gravidade * delta; 
         y += velocidadeY * delta;  
 
         hitbox.setPosition(x + 10, y);
 
-        // --- 4. COLISÃO COM O CHÃO ---
         if (y < 179) {
             y = 179;
             velocidadeY = 0;
             estaNoChao = true;
         }
         
-        // Limites laterais
         if (x < 0) x = 0;
         if (x > 1280 - textura.getWidth()) x = 1280 - textura.getWidth();
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        // 1. Escolhe qual imagem desenhar baseada no ESTADO
         Texture texturaAtual;
 
         switch (estadoAtual) {
@@ -101,24 +97,22 @@ public class Heroi extends Personagem {
                 break;
         }
 
-        // 2. Desenho Inteligente (Com Flip/Espelhamento)
-        // O método draw completo permite inverter a imagem
+
         batch.draw(
             texturaAtual, 
-            x, y,                         // Posição X, Y
-            texturaAtual.getWidth(),      // Largura
-            texturaAtual.getHeight(),     // Altura
-            0, 0,                         // Origem do recorte (0,0)
-            texturaAtual.getWidth(),      // Tamanho do recorte
+            x, y,                        
+            texturaAtual.getWidth(),      
+            texturaAtual.getHeight(),     
+            0, 0,                        
+            texturaAtual.getWidth(),     
             texturaAtual.getHeight(),
-            !olhandoDireita,          // Flip X: Se NÃO olha pra direita, inverte!
-            false                         // Flip Y: Nunca inverte de ponta cabeça
+            !olhandoDireita,          
+            false                         
         );
     }
     
     @Override
     public void dispose() {
-        // Limpa tudo da memória
         imgParado.dispose();
         imgCorrendo.dispose();
         imgPulando.dispose();

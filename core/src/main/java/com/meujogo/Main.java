@@ -1,10 +1,9 @@
 package com.meujogo;
 
-import com.badlogic.gdx.Game; // <-- O SEGREDO ESTÁ AQUI (Era ApplicationAdapter)
+import com.badlogic.gdx.Game; 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Main extends Game {
-    // O Batch é público para as telas (Menu e Jogo) poderem usar
     public SpriteBatch batch;
 
     @Override
