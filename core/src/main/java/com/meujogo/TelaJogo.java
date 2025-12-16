@@ -3,6 +3,7 @@ package com.meujogo;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -16,6 +17,7 @@ public class TelaJogo implements Screen {
     private Heroi player;
     private Texture imgFundo;
     private Array<Rectangle> chaoSolido;
+    private ShapeRenderer debugRenderer;
 
     public TelaJogo(final Main game) {
         this.game = game;
@@ -30,6 +32,7 @@ public class TelaJogo implements Screen {
         player = new Heroi(100, 0);
 
         chaoSolido = new Array<>();
+        debugRenderer = new ShapeRenderer();
         chaoSolido.add(new Rectangle(0, 0, 1280, 100));
         chaoSolido.add(new Rectangle(500, 200, 200, 40));
 
@@ -50,9 +53,21 @@ public class TelaJogo implements Screen {
         
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-            game.batch.draw(imgFundo, 0, 0, 1280, 720);
-            player.render(game.batch);
+        game.batch.draw(imgFundo, 0, 0, 1280, 720);
+        player.render(game.batch);
         game.batch.end();
+
+        debugRenderer.setProjectionMatrix(camera.combined);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+        debugRenderer.setColor(0, 1, 0, 1);
+
+        for (Rectangle retangulo : chaoSolido) {
+            debugRenderer.rect(retangulo.x, retangulo.y, retangulo.width, retangulo.height);
+        }
+
+        debugRenderer.setColor(1, 0, 0, 1);
+        debugRenderer.rect(player.hitbox.x, player.hitbox.y, player.hitbox.width, player.hitbox.height);
+        debugRenderer.end();
     }
 
     @Override
@@ -72,5 +87,6 @@ public class TelaJogo implements Screen {
     public void dispose() {
         imgFundo.dispose();
         player.dispose();
+        debugRenderer.dispose();
     }
 }

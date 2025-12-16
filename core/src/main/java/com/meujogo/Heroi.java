@@ -33,49 +33,60 @@ public class Heroi extends Personagem {
     }
 
     public void atualizar(float delta, Array<Rectangle> plataformas) {
-        estadoAtual = EstadoHeroi.PARADO;
+        if (estaNoChao) {
+            estadoAtual = EstadoHeroi.PARADO;
+        }
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             x += velocidade * delta;
-            estadoAtual = EstadoHeroi.CORRENDO;
+            if (estaNoChao) estadoAtual = EstadoHeroi.CORRENDO;
             olhandoDireita = true;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        } 
+        else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             x -= velocidade * delta;
-            estadoAtual = EstadoHeroi.CORRENDO;
+            if (estaNoChao) estadoAtual = EstadoHeroi.CORRENDO;
             olhandoDireita = false;
         }
-        else{ 
 
-            if(estaNoChao) estadoAtual = EstadoHeroi.PARADO;
-        }
+        velocidadeY += gravidade * delta;
+        y += velocidadeY * delta;
+
+        hitbox.setPosition(x + 10, y);
         
-        if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-            estadoAtual = EstadoHeroi.AGACHADO;
+        estaNoChao = false;
+
+        for (Rectangle chao : plataformas) {
+            if (hitbox.overlaps(chao)) {
+                if (velocidadeY < 0 && y + 10 > chao.y + chao.height / 2) {
+                    y = chao.y + chao.height;
+                    velocidadeY = 0;
+                    estaNoChao = true;
+                    hitbox.setPosition(x + 10, y);
+                }
+            }
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && estaNoChao) {
-            velocidadeY = 500;
+        if ((Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.W)) && estaNoChao) {
+            velocidadeY = 600; 
             estaNoChao = false;
         }
 
-        if(!estaNoChao) {
+        if ((Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) && estaNoChao) {
+            estadoAtual = EstadoHeroi.AGACHADO;
+        }
+
+        if (!estaNoChao) {
             estadoAtual = EstadoHeroi.PULANDO;
         }
 
-        velocidadeY += gravidade * delta; 
-        y += velocidadeY * delta;  
-
-        hitbox.setPosition(x + 10, y);
-
-        if (y < 179) {
-            y = 179;
-            velocidadeY = 0;
-            estaNoChao = true;
-        }
-        
         if (x < 0) x = 0;
         if (x > 1280 - textura.getWidth()) x = 1280 - textura.getWidth();
+        
+        if (y < -100) {
+            x = 100;
+            y = 300;
+            velocidadeY = 0;
+        }
     }
 
     @Override
