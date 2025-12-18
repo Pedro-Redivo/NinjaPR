@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class TelaMenu implements Screen {
-    final Main game; // Referência ao gerente
+    final Main game;
     private OrthographicCamera camera;
     private FitViewport viewport;
     private Texture imagemCapa;
@@ -25,24 +25,20 @@ public class TelaMenu implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0.2f, 1); // Fundo azul escuro
+        ScreenUtils.clear(0, 0, 0.2f, 1); 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        // Desenha a capa no centro
         game.batch.draw(imagemCapa, 
             (1280 - imagemCapa.getWidth()) / 2, 
             (720 - imagemCapa.getHeight()) / 2);
-        // (Opcional) Desenhe um texto aqui depois escrito "Clique para Iniciar"
         game.batch.end();
 
-        // --- LÓGICA DE TROCA DE TELA ---
-        // Se tocou na tela OU apertou Espaço...
+
         if (Gdx.input.justTouched() || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            // ... Troca para a tela do jogo!
             game.setScreen(new TelaJogo(game));
-            dispose(); // Joga fora a tela de menu para economizar memória
+            dispose(); 
         }
     }
 

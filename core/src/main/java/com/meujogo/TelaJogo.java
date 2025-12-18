@@ -22,19 +22,17 @@ public class TelaJogo implements Screen {
     public TelaJogo(final Main game) {
         this.game = game;
 
-        // 1. Configura a câmera
         camera = new OrthographicCamera();
         viewport = new FitViewport(1280, 720, camera);
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
-        // 2. Carrega os assets
-        imgFundo = new Texture("BackGroundTest.jpg");
+        imgFundo = new Texture("fundo.png");
         player = new Heroi(100, 0);
 
         chaoSolido = new Array<>();
         debugRenderer = new ShapeRenderer();
-        chaoSolido.add(new Rectangle(0, 0, 1280, 100));
-        chaoSolido.add(new Rectangle(500, 200, 200, 40));
+        chaoSolido.add(new Rectangle(0, 0, 1280, 220));
+        chaoSolido.add(new Rectangle(500, 220, 200, 110));
 
     }
 
